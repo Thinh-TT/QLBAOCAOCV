@@ -1,0 +1,15 @@
+﻿@model QLBAOCAOCV.DAL.Entities.Phong
+
+<h2>Thêm phòng</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label>Tên phòng</label>
+        <input asp-for="TenPhong" class="form-control" />
+        <span asp-validation-for="TenPhong" class="text-danger"></span>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>

@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="QLBAOCAOCV.BLL/QLBAOCAOCV.BLL.csproj" />
+  <Project Path="QLBAOCAOCV.DAL/QLBAOCAOCV.DAL.csproj" />
+  <Project Path="QLBAOCAOCV.Web/QLBAOCAOCV.Web.csproj" />
+</Solution>
