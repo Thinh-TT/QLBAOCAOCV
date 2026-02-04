@@ -1,0 +1,29 @@
+services:
+  sql-edge:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: qlbaocao-sql
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Thinh@123"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: qlbaocao-web
+    depends_on:
+      - sql-edge
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+      ConnectionStrings__DefaultConnection: "Server=sql-edge,1433;Database=QLBaoCaoCV;User Id=sa;Password=Thinh@123;TrustServerCertificate=True"
+    ports:
+      - "8080:8080"
+
+volumes:
+  sql_data:

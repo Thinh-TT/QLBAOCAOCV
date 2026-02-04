@@ -1,14 +1,15 @@
 ﻿@model List<QLBAOCAOCV.DAL.Entities.BaoCao>
 
-
 @{
     ViewData["Title"] = "Danh sách báo cáo";
 }
+
 <a asp-action="Create" class="btn btn-success mb-3">
     + Thêm báo cáo
 </a>
 
 <h2>Danh sách báo cáo nhiệt độ – độ ẩm</h2>
+
 <form method="get" class="row g-2 mb-3">
     <div class="col-md-2">
         <label>Từ ngày</label>
@@ -42,25 +43,41 @@
         </button>
     </div>
 
-    <a asp-action="ExportExcel"
-       asp-route-fromDate="@ViewBag.FromDate"
-       asp-route-toDate="@ViewBag.ToDate"
-       asp-route-maNV="@ViewBag.MaNV"
-       asp-route-maPhong="@ViewBag.MaPhong"
-       class="btn btn-success ms-2">
-        Xuất Excel
-    </a>
+    <div class="col-md-2 d-flex align-items-end">
 
+        <a asp-action="Index"
+           asp-route-fromDate="@DateTime.Today.ToString("yyyy-MM-dd")"
+           asp-route-toDate="@DateTime.Today.ToString("yyyy-MM-dd")"
+           class="btn btn-warning w-100">
+            Hôm nay
+        </a>
+
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+
+        <a asp-action="ExportExcel"
+           asp-route-fromDate="@ViewBag.FromDate"
+           asp-route-toDate="@ViewBag.ToDate"
+           asp-route-maNV="@ViewBag.MaNV"
+           asp-route-maPhong="@ViewBag.MaPhong"
+           class="btn btn-success w-100">
+            Xuất Excel
+        </a>
+    </div>
 </form>
-<table class="table table-bordered">
-    <thead>
+
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-light">
         <tr>
             <th>Ngày báo cáo</th>
             <th>Nhân viên</th>
             <th>Phòng</th>
-            <th>Nhiệt độ</th>
-            <th>Độ ẩm</th>
+            <th>Nhiệt độ (°C)</th>
+            <th>Độ ẩm (%)</th>
             <th>Trạng thái</th>
+            <th>Ngày xác nhận</th>
+            <th>Ghi chú</th>
             <th>Hành động</th>
         </tr>
     </thead>
@@ -73,12 +90,43 @@
                 <td>@item.Phong?.TenPhong</td>
                 <td>@item.NhietDo</td>
                 <td>@item.DoAm</td>
+
+                <!-- TRẠNG THÁI -->
+                <td class="text-center">
+                    @if (item.TrangThai == null)
+                    {
+                        <span class="badge bg-secondary">Chưa xác nhận</span>
+                    }
+                    else if (item.TrangThai == 0)
+                    {
+                        <span class="badge bg-danger">Fail</span>
+                    }
+                    else if (item.TrangThai == 1)
+                    {
+                        <span class="badge bg-success">Pass</span>
+                    }
+            </td>
+
+            <!-- NGÀY XÁC NHẬN -->
+            <td>
+                @(item.NgayXacNhan.HasValue
+                                ? item.NgayXacNhan.Value.ToString("dd/MM/yyyy HH:mm")
+                                : "-")
+                </td>
+
+                <!-- GHI CHÚ -->
                 <td>
-                    @if (!item.TrangThai)
+                    @(!string.IsNullOrEmpty(item.GhiChuBC) ? item.GhiChuBC : "-")
+                </td>
+
+                <!-- HÀNH ĐỘNG -->
+                <td class="text-center">
+                    @if (item.TrangThai == null)
                     {
                         <form asp-action="XacNhan" method="post" style="display:inline">
                             <input type="hidden" name="id" value="@item.MaBC" />
-                            <button type="submit" class="btn btn-sm btn-success"
+                            <button type="submit"
+                                    class="btn btn-sm btn-primary"
                                     onclick="return confirm('Xác nhận báo cáo này?');">
                                 Xác nhận
                             </button>
@@ -86,24 +134,8 @@
                     }
                     else
                     {
-                        <span class="text-muted">Đã xác nhận</span>
+                        <span class="text-muted">—</span>
                     }
-
-                    @* @if (!item.TrangThai && (bool)ViewBag.IsManager)
-                    {
-                        <form asp-action="XacNhan" method="post" style="display:inline">
-                            <input type="hidden" name="id" value="@item.MaBC" />
-                            <button type="submit" class="btn btn-sm btn-success"
-                                    onclick="return confirm('Xác nhận báo cáo này?');">
-                                Xác nhận
-                            </button>
-                        </form>
-                    }
-                    else if (item.TrangThai)
-                    {
-                        <span class="text-muted">Đã xác nhận</span>
-                    } *@
-
                 </td>
             </tr>
         }

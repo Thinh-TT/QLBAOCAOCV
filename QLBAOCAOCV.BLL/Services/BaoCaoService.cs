@@ -38,7 +38,7 @@ namespace QLBAOCAOCV.BLL.Services
         public void Create(BaoCao baoCao)
         {
             baoCao.NgayBC = DateTime.Now;
-            baoCao.TrangThai = false;
+            baoCao.TrangThai = null;
 
             _context.BaoCaos.Add(baoCao);
             _context.SaveChanges();
@@ -49,10 +49,37 @@ namespace QLBAOCAOCV.BLL.Services
             var baoCao = _context.BaoCaos.FirstOrDefault(b => b.MaBC == maBC);
             if (baoCao == null) return;
 
-            baoCao.TrangThai = true;
             baoCao.NgayXacNhan = DateTime.Now;
 
+            if (baoCao.NhietDo < 15)
+            {
+                SetFail(baoCao, "Nhiệt độ quá thấp.");
+            }
+            else if (baoCao.NhietDo > 25)
+            {
+                SetFail(baoCao, "Nhiệt độ quá cao.");
+            }
+            else if (baoCao.DoAm < 40)
+            {
+                SetFail(baoCao, "Độ ẩm quá thấp.");
+            }
+            else if (baoCao.DoAm > 70)
+            {
+                SetFail(baoCao, "Độ ẩm quá cao.");
+            }
+            else
+            {
+                baoCao.TrangThai = 1;
+                baoCao.GhiChuBC = null;
+            }
+
             _context.SaveChanges();
+        }
+
+        private void SetFail(BaoCao baoCao, string ghiChu)
+        {
+            baoCao.TrangThai = 0;
+            baoCao.GhiChuBC = ghiChu;
         }
 
         public List<BaoCao> Search(
