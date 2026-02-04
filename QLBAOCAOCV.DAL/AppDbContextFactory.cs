@@ -19,7 +19,7 @@ namespace QLBAOCAOCV.DAL
                 "Server=localhost,1433;" +
                 "Database=QLBAOCAOCV;" +
                 "User Id=sa;" +
-                "Password=Thinh@123;" +
+                "Password=Thinh@12345;" +
                 "TrustServerCertificate=True";
 
             optionsBuilder.UseSqlServer(connectionString);
