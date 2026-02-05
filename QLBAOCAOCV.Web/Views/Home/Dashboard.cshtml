@@ -1,0 +1,19 @@
+﻿@{
+    var tenNV = Context.Session.GetString("TenNV");
+    var role = Context.Session.GetString("Role");
+}
+
+<div class="mt-4">
+    <h3>Xin chào @tenNV 👋</h3>
+
+    <p>
+        Bạn đang đăng nhập với quyền:
+        <strong>@role</strong>
+    </p>
+
+    <a class="btn btn-success"
+       asp-controller="BaoCao"
+       asp-action="Index">
+        Vào hệ thống báo cáo
+    </a>
+</div>

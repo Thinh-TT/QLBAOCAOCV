@@ -24,5 +24,14 @@ namespace QLBAOCAOCV.BLL.Interfaces
         int? maPhong
         );
 
+        IEnumerable<BaoCao> Search(
+            DateTime? fromDate,
+            DateTime? toDate,
+            int? maNV,
+            int? maPhong,
+            int currentMaNV,
+            string role
+        );
+
     }
 }

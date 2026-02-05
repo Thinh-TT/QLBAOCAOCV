@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QLBAOCAOCV.BLL.Interfaces;
 using QLBAOCAOCV.DAL.Entities;
+using QLBAOCAOCV.DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,12 @@ namespace QLBAOCAOCV.BLL.Services
     public class BaoCaoService : IBaoCaoService
     {
         private readonly AppDbContext _context;
+        private readonly IBaoCaoRepository _baoCaoRepo;
 
-        public BaoCaoService(AppDbContext context)
+        public BaoCaoService(AppDbContext context, IBaoCaoRepository baoCaoRepo)
         {
             _context = context;
+            _baoCaoRepo = baoCaoRepo;
         }
 
         public List<BaoCao> GetAll()
@@ -35,6 +38,39 @@ namespace QLBAOCAOCV.BLL.Services
                 .FirstOrDefault(b => b.MaBC == maBC);
         }
 
+        public IEnumerable<BaoCao> Search(
+                                        DateTime? fromDate,
+                                        DateTime? toDate,
+                                        int? maNV,
+                                        int? maPhong,
+                                        int currentMaNV,
+                                        string role)
+        {
+            var query = _baoCaoRepo.GetAll();
+
+            // 🔒 PHÂN QUYỀN THEO DỮ LIỆU
+            if (role == "User")
+            {
+                query = query.Where(bc => bc.MaNV == currentMaNV);
+            }
+            else if (maNV.HasValue)
+            {
+                query = query.Where(bc => bc.MaNV == maNV.Value);
+            }
+
+            // 🔍 FILTER BÌNH THƯỜNG
+            if (fromDate.HasValue)
+                query = query.Where(bc => bc.NgayBC >= fromDate.Value);
+
+            if (toDate.HasValue)
+                query = query.Where(bc => bc.NgayBC <= toDate.Value);
+
+            if (maPhong.HasValue)
+                query = query.Where(bc => bc.MaPhong == maPhong.Value);
+
+            return query.ToList();
+        }
+
         public void Create(BaoCao baoCao)
         {
             baoCao.NgayBC = DateTime.Now;
@@ -42,6 +78,18 @@ namespace QLBAOCAOCV.BLL.Services
 
             _context.BaoCaos.Add(baoCao);
             _context.SaveChanges();
+        }
+
+        public IEnumerable<BaoCao> GetForCurrentUser(int maNV, string role)
+        {
+            var query = _baoCaoRepo.GetAll();
+
+            if (role == "User")
+            {
+                query = query.Where(bc => bc.MaNV == maNV);
+            }
+
+            return query.ToList();
         }
 
         public void XacNhanBaoCao(int maBC)
@@ -110,5 +158,16 @@ namespace QLBAOCAOCV.BLL.Services
                 .ToList();
         }
 
+        public IEnumerable<BaoCao> GetBaoCaoByUser(int maNV, string role)
+        {
+            var query = _baoCaoRepo.GetAll();
+
+            if (role == "User")
+            {
+                query = query.Where(bc => bc.MaNV == maNV);
+            }
+
+            return query.ToList();
+        }
     }
 }

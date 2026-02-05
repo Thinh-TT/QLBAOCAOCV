@@ -17,6 +17,6 @@ namespace QLBAOCAOCV.DAL.Entities
         public string TenPhong { get; set; } = string.Empty;
 
         // Navigation
-        public ICollection<BaoCao>? BaoCaos { get; set; }
+        public ICollection<BaoCao>? BaoCaos { get; set; } = new List<BaoCao>();
     }
 }

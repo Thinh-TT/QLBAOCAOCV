@@ -1,0 +1,23 @@
+﻿<h3>Tạo tài khoản</h3>
+
+<form method="post">
+    <div class="mb-2">
+        <label>Nhân viên</label>
+        <select name="maNV" asp-items="ViewBag.NhanViens"></select>
+    </div>
+
+    <div class="mb-2">
+        <label>Username</label>
+        <input name="username" />
+    </div>
+
+    <div class="mb-2">
+        <label>Role</label>
+        <select name="role">
+            <option value="User">User</option>
+            <option value="Admin">Admin</option>
+        </select>
+    </div>
+
+    <button class="btn btn-success">Tạo tài khoản</button>
+</form>

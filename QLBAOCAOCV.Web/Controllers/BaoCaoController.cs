@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ClosedXML.Excel;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using QLBAOCAOCV.BLL.Interfaces;
 using QLBAOCAOCV.DAL.Entities;
-using ClosedXML.Excel;
+using QLBAOCAOCV.Web.Filters;
+using QLBAOCAOCV.Web.ViewModels;
 using System.IO;
 
 namespace QLBAOCAOCV.Web.Controllers
 {
+    [AuthFilter]
     public class BaoCaoController : Controller
     {
         private readonly IBaoCaoService _baoCaoService;
@@ -22,19 +25,34 @@ namespace QLBAOCAOCV.Web.Controllers
 
         // ===================== INDEX =====================
         public IActionResult Index(
-            DateTime? fromDate,
-            DateTime? toDate,
-            int? maNV,
-            int? maPhong)
+                                    DateTime? fromDate,
+                                    DateTime? toDate,
+                                    int? maNV,
+                                    int? maPhong)
         {
-            var danhSach = _baoCaoService.Search(fromDate, toDate, maNV, maPhong);
+            int currentMaNV = HttpContext.Session.GetInt32("MaNV")!.Value;
+            string role = HttpContext.Session.GetString("Role")!;
+
+            var danhSach = _baoCaoService.Search(
+                fromDate,
+                toDate,
+                maNV,
+                maPhong,
+                currentMaNV,
+                role
+            );
 
             ViewBag.FromDate = fromDate;
             ViewBag.ToDate = toDate;
             ViewBag.MaNV = maNV;
             ViewBag.MaPhong = maPhong;
 
-            ViewBag.NhanViens = new SelectList(_context.NhanViens, "MaNV", "TenNV");
+            // CHỈ ADMIN MỚI CÓ LIST NHÂN VIÊN
+            if (role == "Admin")
+            {
+                ViewBag.NhanViens = new SelectList(_context.NhanViens, "MaNV", "TenNV");
+            }
+
             ViewBag.Phongs = new SelectList(_context.Phongs, "MaPhong", "TenPhong");
 
             return View(danhSach);
@@ -43,36 +61,71 @@ namespace QLBAOCAOCV.Web.Controllers
         // ===================== CREATE =====================
         public IActionResult Create()
         {
-            ViewBag.NhanViens = new SelectList(_context.NhanViens, "MaNV", "TenNV");
             ViewBag.Phongs = new SelectList(_context.Phongs, "MaPhong", "TenPhong");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(BaoCao baoCao)
+        public IActionResult Create(BaoCaoCreateVM model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _baoCaoService.Create(baoCao);
-                return RedirectToAction(nameof(Index));
+                ViewBag.Phongs = new SelectList(_context.Phongs, "MaPhong", "TenPhong");
+                return View(model);
             }
 
-            ViewBag.NhanViens = new SelectList(_context.NhanViens, "MaNV", "TenNV");
-            ViewBag.Phongs = new SelectList(_context.Phongs, "MaPhong", "TenPhong");
-            return View(baoCao);
+            int maNV = HttpContext.Session.GetInt32("MaNV")!.Value;
+
+            var baoCao = new BaoCao
+            {
+                MaNV = maNV, // LAY TU SESSION
+                MaPhong = model.MaPhong,
+                NhietDo = model.NhietDo,
+                DoAm = model.DoAm,
+                GhiChuBC = model.GhiChuBC,
+                NgayBC = DateTime.Now,
+                TrangThai = null
+            };
+
+            _baoCaoService.Create(baoCao);
+            TempData["Success"] = "Them bao cao thanh cong";
+
+            return RedirectToAction(nameof(Index));
         }
 
         // ===================== XÁC NHẬN =====================
+        [AdminOnlyFilter]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult XacNhan(int id)
         {
-            var bc = _baoCaoService.GetById(id);
-            if (bc == null || bc.TrangThai != null)
+            // 1. Kiem tra quyen
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Admin")
+            {
+                TempData["Error"] = "Ban khong co quyen xac nhan bao cao";
                 return RedirectToAction(nameof(Index));
+            }
 
+            // 2. Lay bao cao
+            var bc = _baoCaoService.GetById(id);
+            if (bc == null)
+            {
+                TempData["Error"] = "Bao cao khong ton tai";
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (bc.TrangThai != null)
+            {
+                TempData["Error"] = "Bao cao da duoc xu ly truoc do";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // 3. Xac nhan
             _baoCaoService.XacNhanBaoCao(id);
+            TempData["Success"] = "Xac nhan bao cao thanh cong";
+
             return RedirectToAction(nameof(Index));
         }
 

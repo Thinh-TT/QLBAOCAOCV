@@ -1,8 +1,27 @@
-﻿@model List<QLBAOCAOCV.DAL.Entities.BaoCao>
+﻿@{
+    var role = Context.Session.GetString("Role");
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@model List<QLBAOCAOCV.DAL.Entities.BaoCao>
 
 @{
     ViewData["Title"] = "Danh sách báo cáo";
 }
+
 
 <a asp-action="Create" class="btn btn-success mb-3">
     + Thêm báo cáo
@@ -23,12 +42,19 @@
                value="@ViewBag.ToDate?.ToString("yyyy-MM-dd")" />
     </div>
 
-    <div class="col-md-3">
-        <label>Nhân viên</label>
-        <select name="maNV" class="form-control" asp-items="ViewBag.NhanViens">
-            <option value="">-- Tất cả --</option>
-        </select>
-    </div>
+    
+        
+        @if (role == "Admin")
+        {
+        <div class="col-md-3">
+            <label>Nhân viên</label>
+            <select name="maNV" class="form-control" asp-items="ViewBag.NhanViens">
+                <option value="">-- Tất cả --</option>
+            </select>
+        </div>
+        }
+        
+   
 
     <div class="col-md-3">
         <label>Phòng</label>
@@ -42,12 +68,17 @@
             Tìm kiếm
         </button>
     </div>
+    @if (role == "User")
+    {
+        <div class="col-md-2 d-flex align-items-end">
+        </div>
+    }
+    
 
     <div class="col-md-2 d-flex align-items-end">
 
         <a asp-action="Index"
            asp-route-fromDate="@DateTime.Today.ToString("yyyy-MM-dd")"
-           asp-route-toDate="@DateTime.Today.ToString("yyyy-MM-dd")"
            class="btn btn-warning w-100">
             Hôm nay
         </a>
@@ -78,7 +109,10 @@
             <th>Trạng thái</th>
             <th>Ngày xác nhận</th>
             <th>Ghi chú</th>
-            <th>Hành động</th>
+            @if (role == "Admin")
+            {
+                <th>Hành động</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -120,23 +154,27 @@
                 </td>
 
                 <!-- HÀNH ĐỘNG -->
-                <td class="text-center">
-                    @if (item.TrangThai == null)
-                    {
-                        <form asp-action="XacNhan" method="post" style="display:inline">
-                            <input type="hidden" name="id" value="@item.MaBC" />
-                            <button type="submit"
-                                    class="btn btn-sm btn-primary"
-                                    onclick="return confirm('Xác nhận báo cáo này?');">
-                                Xác nhận
-                            </button>
-                        </form>
-                    }
-                    else
-                    {
-                        <span class="text-muted">—</span>
-                    }
-                </td>
+                @if (role == "Admin")
+                {
+                    <td class="text-center">
+                        @if (item.TrangThai == null)
+                        {
+                            <form asp-action="XacNhan" method="post" style="display:inline">
+                                <input type="hidden" name="id" value="@item.MaBC" />
+                                <button type="submit"
+                                        class="btn btn-sm btn-primary"
+                                        onclick="return confirm('Xác nhận báo cáo này?');">
+                                    Xác nhận
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
+                }
+                
             </tr>
         }
     </tbody>

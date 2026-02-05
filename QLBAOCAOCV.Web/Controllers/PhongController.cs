@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QLBAOCAOCV.DAL;
 using QLBAOCAOCV.DAL.Entities;
+using QLBAOCAOCV.Web.Filters;
 
 namespace QLBAOCAOCV.Web.Controllers
 {
+    [AuthFilter]
     public class PhongController : Controller
     {
         private readonly AppDbContext _context;

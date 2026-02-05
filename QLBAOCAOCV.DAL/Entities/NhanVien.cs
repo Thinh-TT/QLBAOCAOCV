@@ -27,6 +27,7 @@ namespace QLBAOCAOCV.DAL.Entities
         public string Role { get; set; } = "User"; // User | Manager
 
         // Navigation
-        public ICollection<BaoCao>? BaoCaos { get; set; }
+        public ICollection<BaoCao>? BaoCaos { get; set; } = new List<BaoCao>();
+        public TaiKhoan? TaiKhoan { get; set; }
     }
 }

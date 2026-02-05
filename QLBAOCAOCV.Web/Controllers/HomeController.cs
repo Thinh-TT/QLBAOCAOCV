@@ -1,6 +1,7 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using QLBAOCAOCV.Web.Filters;
 using QLBAOCAOCV.Web.Models;
+using System.Diagnostics;
 
 namespace QLBAOCAOCV.Web.Controllers
 {
@@ -15,6 +16,12 @@ namespace QLBAOCAOCV.Web.Controllers
 
         public IActionResult Index()
         {
+            var tenNV = HttpContext.Session.GetString("TenNV");
+            if (tenNV != null)
+            {
+                return View("Dashboard");
+            }
+
             return View();
         }
 
@@ -27,6 +34,11 @@ namespace QLBAOCAOCV.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Support()
+        {
+            return View();
         }
     }
 }

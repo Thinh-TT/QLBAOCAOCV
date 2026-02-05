@@ -3,9 +3,12 @@ using QLBAOCAOCV.BLL.Interfaces;
 using QLBAOCAOCV.BLL.Services;
 using QLBAOCAOCV.DAL;
 using QLBAOCAOCV.DAL.Entities;
+using QLBAOCAOCV.DAL.Repositories;
+using QLBAOCAOCV.DAL.Seed;
 
 
 var builder = WebApplication.CreateBuilder(args);
+// DbContext
 // DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
@@ -13,11 +16,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
-// BLL Services
-builder.Services.AddScoped<IBaoCaoService, BaoCaoService>();
+// DAL
+builder.Services.AddScoped<IBaoCaoRepository, BaoCaoRepository>();
+builder.Services.AddScoped<ITaiKhoanRepository, TaiKhoanRepository>();
+builder.Services.AddScoped<ITaiKhoanService, TaiKhoanService>();
 
-// Add services to the container.
+// BLL
+builder.Services.AddScoped<IBaoCaoService, BaoCaoService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+// MVC
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -33,6 +48,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthorization();
 
@@ -40,10 +56,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-//    db.Database.Migrate();
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    DbSeeder.Seed(db);
+}
 
 app.Run();
