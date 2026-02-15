@@ -89,7 +89,7 @@ namespace QLBAOCAOCV.Web.Controllers
             };
 
             _baoCaoService.Create(baoCao);
-            TempData["Success"] = "Them bao cao thanh cong";
+            TempData["Success"] = "Report created successfully.";
 
             return RedirectToAction(nameof(Index));
         }
@@ -104,7 +104,7 @@ namespace QLBAOCAOCV.Web.Controllers
             var role = HttpContext.Session.GetString("Role");
             if (role != "Admin")
             {
-                TempData["Error"] = "Ban khong co quyen xac nhan bao cao";
+                TempData["Error"] = "You do not have permission to confirm this report.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -112,19 +112,19 @@ namespace QLBAOCAOCV.Web.Controllers
             var bc = _baoCaoService.GetById(id);
             if (bc == null)
             {
-                TempData["Error"] = "Bao cao khong ton tai";
+                TempData["Error"] = "Report not found.";
                 return RedirectToAction(nameof(Index));
             }
 
             if (bc.TrangThai != null)
             {
-                TempData["Error"] = "Bao cao da duoc xu ly truoc do";
+                TempData["Error"] = "This report has already been confirmed";
                 return RedirectToAction(nameof(Index));
             }
 
             // 3. Xac nhan
             _baoCaoService.XacNhanBaoCao(id);
-            TempData["Success"] = "Xac nhan bao cao thanh cong";
+            TempData["Success"] = "Report confirmed successfully";
 
             return RedirectToAction(nameof(Index));
         }
