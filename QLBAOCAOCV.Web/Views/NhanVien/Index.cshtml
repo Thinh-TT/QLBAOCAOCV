@@ -1,15 +1,15 @@
 ﻿@model List<QLBAOCAOCV.DAL.Entities.NhanVien>
 
-<h2>Danh sách nhân viên</h2>
+<h2>Employee List</h2>
 
-<a asp-action="Create" class="btn btn-success mb-3">+ Thêm nhân viên</a>
+<a asp-action="Create" class="btn btn-success mb-3">+ Add Employee</a>
 
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Tên</th>
+            <th>Name</th>
             <th>Email</th>
-            <th>Hành động</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -19,11 +19,11 @@
                 <td>@item.TenNV</td>
                 <td>@item.EmailNV</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.MaNV" class="btn btn-sm btn-warning">Sửa</a>
+                    <a asp-action="Edit" asp-route-id="@item.MaNV" class="btn btn-sm btn-warning">Edit</a>
                     <a asp-action="Delete" asp-route-id="@item.MaNV"
                        class="btn btn-sm btn-danger"
-                       onclick="return confirm('Xóa nhân viên này?');">
-                        Xóa
+                       onclick="return confirm('Are you sure you want to delete this employee?');">
+                        Delete
                     </a>
                 </td>
             </tr>

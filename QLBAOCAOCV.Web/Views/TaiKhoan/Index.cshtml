@@ -1,21 +1,21 @@
 ﻿@model IEnumerable<QLBAOCAOCV.DAL.Entities.TaiKhoan>
 
-<h3>Quan ly tai khoan</h3>
+<h3>Account Management</h3>
 
 @if (TempData["Success"] != null)
 {
     <div class="alert alert-success">@TempData["Success"]</div>
 }
 
-<a class="btn btn-primary mb-2" asp-action="Create">Them tai khoan</a>
+<a class="btn btn-primary mb-2" asp-action="Create">+ Add Account</a>
 
 <table class="table table-bordered">
     <tr>
         <th>Username</th>
-        <th>Nhân viên</th>
+        <th>Employee</th>
         <th>Role</th>
-        <th>Trạng thái</th>
-        <th>Hành động</th>
+        <th>Status</th>
+        <th>Actions</th>
     </tr>
 
     @foreach (var tk in Model)
@@ -24,19 +24,19 @@
             <td>@tk.Username</td>
             <td>@tk.NhanVien?.TenNV</td>
             <td>@tk.Role</td>
-            <td>@(tk.IsActive ? "Hoat dong" : "Khoa")</td>
+            <td>@(tk.IsActive ? "Active" : "Inactive")</td>
             <td>
                 <form asp-action="ToggleActive" method="post" class="d-inline">
                     <input type="hidden" name="id" value="@tk.UserId" />
                     <button class="btn btn-warning btn-sm">
-                        @(tk.IsActive ? "Khóa" : "Mở")
+                        @(tk.IsActive ? "Disable" : "Enable")
                     </button>
                 </form>
 
                 <form asp-action="ResetPassword" method="post" class="d-inline">
                     <input type="hidden" name="id" value="@tk.UserId" />
                     <button class="btn btn-danger btn-sm">
-						Đổi mật khẩu
+                        Reset Password
                     </button>
                 </form>
             </td>

@@ -142,14 +142,14 @@ namespace QLBAOCAOCV.Web.Controllers
             var ws = workbook.Worksheets.Add("BaoCao");
 
             // Header
-            ws.Cell(1, 1).Value = "Ngay bao cao";
-            ws.Cell(1, 2).Value = "Nhan vien";
-            ws.Cell(1, 3).Value = "Phong";
-            ws.Cell(1, 4).Value = "Nhiet do";
-            ws.Cell(1, 5).Value = "Do am";
-            ws.Cell(1, 6).Value = "Trang thai";
-            ws.Cell(1, 7).Value = "Ngay xac nhan";
-            ws.Cell(1, 8).Value = "Ghi chu";
+            ws.Cell(1, 1).Value = "Report Date";
+            ws.Cell(1, 2).Value = "Employee";
+            ws.Cell(1, 3).Value = "Room";
+            ws.Cell(1, 4).Value = "Temperature";
+            ws.Cell(1, 5).Value = "Humidity";
+            ws.Cell(1, 6).Value = "Status";
+            ws.Cell(1, 7).Value = "Confirmation Date";
+            ws.Cell(1, 8).Value = "Notes";
 
             int row = 2;
             foreach (var bc in data)
@@ -163,10 +163,10 @@ namespace QLBAOCAOCV.Web.Controllers
                 // TRẠNG THÁI
                 ws.Cell(row, 6).Value = bc.TrangThai switch
                 {
-                    null => "Chua xac nhan",
-                    0 => "Fail",
-                    1 => "Pass",
-                    _ => "Khong xac dinh"
+                    null => "Pending",
+                    0 => "Failed",
+                    1 => "Passed",
+                    _ => "undefined"
                 };
 
                 ws.Cell(row, 7).Value = bc.NgayXacNhan?.ToString("dd/MM/yyyy HH:mm") ?? "";
@@ -183,7 +183,7 @@ namespace QLBAOCAOCV.Web.Controllers
             return File(
                 stream.ToArray(),
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "BaoCaoNhietDoDoAm.xlsx");
+                "export.xlsx");
         }
     }
 }

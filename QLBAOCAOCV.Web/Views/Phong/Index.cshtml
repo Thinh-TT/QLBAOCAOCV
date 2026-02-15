@@ -1,14 +1,14 @@
 ﻿@model List<QLBAOCAOCV.DAL.Entities.Phong>
 
-<h2>Danh sách phòng</h2>
+<h2>Room List</h2>
 
-<a asp-action="Create" class="btn btn-success mb-3">+ Thêm phòng</a>
+<a asp-action="Create" class="btn btn-success mb-3">+ Add Room</a>
 
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Tên phòng</th>
-            <th>Hành động</th>
+            <th>Room Name</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -17,11 +17,11 @@
             <tr>
                 <td>@item.TenPhong</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.MaPhong" class="btn btn-sm btn-warning">Sửa</a>
+                    <a asp-action="Edit" asp-route-id="@item.MaPhong" class="btn btn-sm btn-warning">Edit</a>
                     <a asp-action="Delete" asp-route-id="@item.MaPhong"
                        class="btn btn-sm btn-danger"
-                       onclick="return confirm('Xóa phòng này?');">
-                        Xóa
+                       onclick="return confirm('Are you sure you want to delete this room?');">
+                        Delete
                     </a>
                 </td>
             </tr>

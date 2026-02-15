@@ -1,10 +1,10 @@
 ﻿@model QLBAOCAOCV.DAL.Entities.NhanVien
 
-<h2>Thêm nhân viên</h2>
+<h2>Add Employee</h2>
 
 <form asp-action="Create" method="post">
     <div class="form-group">
-        <label>Tên nhân viên</label>
+        <label>Employee Name</label>
         <input asp-for="TenNV" class="form-control" />
         <span asp-validation-for="TenNV" class="text-danger"></span>
     </div>
@@ -15,15 +15,7 @@
         <span asp-validation-for="EmailNV" class="text-danger"></span>
     </div>
 
-    @* <div class="form-group">
-        <label>Vai trò</label>
-        <select asp-for="Role" class="form-control">
-            <option value="User">User</option>
-            <option value="Manager">Manager</option>
-        </select>
-    </div> *@
-
     <br />
-    <button type="submit" class="btn btn-primary">Lưu</button>
-    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </form>

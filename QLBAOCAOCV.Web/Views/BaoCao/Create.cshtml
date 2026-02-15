@@ -1,7 +1,7 @@
 ﻿@model QLBAOCAOCV.DAL.Entities.BaoCao
 
 @{
-    ViewData["Title"] = "Thêm báo cáo";
+    ViewData["Title"] = "Add Report";
 }
 
 @{
@@ -10,38 +10,38 @@
 
 
 <div asp-validation-summary="All" class="text-danger"></div>
-<h2>Thêm báo cáo nhiệt độ – độ ẩm</h2>
+<h2>Add Temperature & Humidity Report</h2>
 <p>
-    <strong>Nhan vien:</strong> @tenNV
+    <strong>Employee: </strong> @tenNV
 </p>
 <form asp-action="Create" method="post">
     
     <div class="form-group">
-        <label>Phòng</label>
+        <label>Room</label>
         <select asp-for="MaPhong" class="form-control" asp-items="ViewBag.Phongs">
-            <option value="">-- Chọn phòng --</option>
+            <option value="">-- Select Room --</option>
         </select>
     </div>
 
     <div class="form-group">
-        <label>Nhiệt độ (°C)</label>
+        <label>Temperature (°C)</label>
         <input asp-for="NhietDo" class="form-control" />
         <span asp-validation-for="NhietDo" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label>Độ ẩm (%)</label>
+        <label>Humidity (%)</label>
         <input asp-for="DoAm" class="form-control" />
         <span asp-validation-for="DoAm" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label>Ghi chú</label>
+        <label>Notes</label>
         <textarea asp-for="GhiChuBC" class="form-control"></textarea>
     </div>
 
     <br />
 
-    <button type="submit" class="btn btn-primary">Lưu báo cáo</button>
-    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    <button type="submit" class="btn btn-primary">Save Report</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </form>

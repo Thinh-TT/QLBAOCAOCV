@@ -18,7 +18,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                    QLBaoCaoCV
+                    EnviroMonitor
                 </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -35,7 +35,7 @@
                             <a class="nav-link text-dark"
                                asp-controller="Home"
                                asp-action="Index">
-                                Trang chủ
+                                Home
                             </a>
                         </li>
 
@@ -45,7 +45,7 @@
                                 <a class="nav-link text-dark"
                                    asp-controller="BaoCao"
                                    asp-action="Index">
-                                    Báo cáo
+                                    Reports
                                 </a>
                             </li>
                         }
@@ -56,7 +56,7 @@
                                 <a class="nav-link text-dark"
                                    asp-controller="NhanVien"
                                    asp-action="Index">
-                                    Nhân viên
+                                    Employees
                                 </a>
                             </li>
 
@@ -64,7 +64,7 @@
                                 <a class="nav-link text-dark"
                                    asp-controller="Phong"
                                    asp-action="Index">
-                                    Phòng
+                                    Rooms
                                 </a>
                             </li>
 
@@ -72,7 +72,7 @@
                                 <a class="nav-link text-dark"
                                    asp-controller="TaiKhoan"
                                    asp-action="Index">
-                                    Quản lý tài khoản
+                                    User Management
                                 </a>
                             </li>
                         }
@@ -81,7 +81,7 @@
                             <a class="nav-link text-dark"
                                asp-controller="Home"
                                asp-action="Support">
-                                Hỗ trợ 
+                                Support
                             </a>
                         </li>
                     </ul>
@@ -92,7 +92,7 @@
                         {
                             <li class="nav-item">
                                 <span class="navbar-text me-3">
-                                    Xin chào, <strong>@tenNV</strong>
+                                    Welcome, <strong>@tenNV</strong>
                                 </span>
                             </li>
 
@@ -100,7 +100,7 @@
                                 <a class="nav-link text-danger"
                                    asp-controller="Account"
                                    asp-action="Logout">
-                                    Đăng xuất
+                                    Sign Out
                                 </a>
                             </li>
                         }
@@ -110,7 +110,7 @@
                                 <a class="nav-link text-primary"
                                    asp-controller="Account"
                                    asp-action="Login">
-                                    Đăng nhập
+                                    Sign In
                                 </a>
                             </li>
                         }
@@ -129,9 +129,9 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - QLBaoCaoCV -
+            &copy; EnviroMonitor – Internal Environmental Monitoring System
             <a asp-controller="Home" asp-action="Support">
-                Hỗ trợ
+                Support
             </a>
         </div>
     </footer>

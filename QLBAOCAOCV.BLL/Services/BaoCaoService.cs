@@ -101,19 +101,19 @@ namespace QLBAOCAOCV.BLL.Services
 
             if (baoCao.NhietDo < 15)
             {
-                SetFail(baoCao, "Nhiệt độ quá thấp.");
+                SetFail(baoCao, "Temperature Below Minimum Limit. ");
             }
             else if (baoCao.NhietDo > 25)
             {
-                SetFail(baoCao, "Nhiệt độ quá cao.");
+                SetFail(baoCao, "Temperature Above Maximum Limit. ");
             }
             else if (baoCao.DoAm < 40)
             {
-                SetFail(baoCao, "Độ ẩm quá thấp.");
+                SetFail(baoCao, "Humidity Below Minimum Limit. ");
             }
             else if (baoCao.DoAm > 70)
             {
-                SetFail(baoCao, "Độ ẩm quá cao.");
+                SetFail(baoCao, "Humidity Above Maximum Limit. ");
             }
             else
             {
